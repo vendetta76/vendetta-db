@@ -1,27 +1,24 @@
-let token = "";  // hanya disimpan selama sesi
-
+let token = "";
 const workerURL = "https://vendetta-db-worker.diorvendetta76.workers.dev";
 
-function login() {
+async function login() {
   const pw = document.getElementById("password").value;
-  if (!pw) return alert("Password tidak boleh kosong.");
+  if (!pw) return alert("Masukkan password");
 
-  fetch(workerURL + "/api/login", {
+  const res = await fetch(workerURL + "/api/login", {
     method: "POST",
-    headers: { "Authorization": `Bearer ${pw}` }
-  })
-  .then(res => res.ok ? res.json() : Promise.reject())
-  .then(data => {
-    if (data.success) {
-      token = pw;
-      document.getElementById("login-box").style.display = "none";
-      document.getElementById("app").style.display = "block";
-      loadFiles();
-    } else {
-      alert("Password salah.");
-    }
-  })
-  .catch(() => alert("Gagal login."));
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ password: pw })
+  });
+
+  if (!res.ok) return alert("Password salah!");
+
+  const data = await res.json();
+  token = data.token;
+
+  document.getElementById("login-box").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  loadFiles();
 }
 
 document.getElementById("upload-form").addEventListener("submit", async e => {
@@ -50,6 +47,7 @@ async function loadFiles() {
   const res = await fetch(workerURL + "/api/list", {
     headers: { "Authorization": `Bearer ${token}` }
   });
+
   const data = await res.json();
   const listBox = document.getElementById("file-list");
   listBox.innerHTML = data.map(file =>
