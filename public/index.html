@@ -1,32 +1,49 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vendetta-DB</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendetta Control Panel</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <h1>Vendetta-DB</h1>
+    <h1>🧠 Vendetta File Manager</h1>
 
-    <!-- Login UI -->
+    <!-- Login -->
     <div id="login-box">
-      <input type="password" id="password" placeholder="Masukkan password..." />
+      <input type="password" id="password" placeholder="Enter password..." />
       <button onclick="login()">Login</button>
     </div>
 
-    <!-- App UI -->
-    <div id="app" style="display: none">
+    <!-- Main Panel -->
+    <div id="panel" style="display:none">
+      <h2>Upload File</h2>
       <form id="upload-form">
-        <input type="file" id="file-input" />
+        <input type="file" id="upload-file" />
+        <input type="text" id="upload-path" placeholder="Folder (optional)" />
         <button type="submit">Upload</button>
       </form>
-      <div id="status"></div>
-      <div id="file-list">Loading file...</div>
-    </div>
-  </div>
 
-  <script src="script.js"></script>
+      <h2>Create New File</h2>
+      <form id="create-file-form">
+        <input type="text" id="file-name" placeholder="File name (with extension)" />
+        <textarea id="file-content" placeholder="File content..."></textarea>
+        <input type="text" id="file-folder" placeholder="Target folder (optional)" />
+        <button type="submit">Create File</button>
+      </form>
+
+      <h2>Create Folder</h2>
+      <form id="create-folder-form">
+        <input type="text" id="new-folder-name" placeholder="Folder name" />
+        <button type="submit">Create Folder</button>
+      </form>
+
+      <h2>Files</h2>
+      <div id="file-list">Loading...</div>
+    </div>
+
+    <script src="script.js"></script>
+  </div>
 </body>
 </html>
