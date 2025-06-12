@@ -26,33 +26,33 @@ export default function FileList({ token, files, onDelete }: Props) {
   };
 
   const deleteSingle = async (fileKey: string) => {
-    if (!confirm(`Yakin hapus file ini?\n${fileKey}`)) return;
-    setDeleting(fileKey);
+  if (!confirm(`Yakin hapus file ini?\n${fileKey}`)) return;
+  setDeleting(fileKey);
 
-    await fetch(`/api/delete?file=${encodeURIComponent(fileKey)}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
+  await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/delete?file=${encodeURIComponent(fileKey)}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
-    setDeleting(null);
-    onDelete();
-  };
+  setDeleting(null);
+  onDelete();
+};
 
-  const deleteSelected = async () => {
-    if (!confirm(`Hapus ${selected.size} file?`)) return;
+const deleteSelected = async () => {
+  if (!confirm(`Hapus ${selected.size} file?`)) return;
 
-    await Promise.all(
-      Array.from(selected).map((fileKey) =>
-        fetch(`/api/delete?file=${encodeURIComponent(fileKey)}`, {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        })
-      )
-    );
+  await Promise.all(
+    Array.from(selected).map((fileKey) =>
+      fetch(`${import.meta.env.VITE_API_BASE_URL}/api/delete?file=${encodeURIComponent(fileKey)}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      })
+    )
+  );
 
-    setSelected(new Set());
-    onDelete();
-  };
+  setSelected(new Set());
+  onDelete();
+};
 
   const toggleAll = () => {
     if (selected.size === files.length) {

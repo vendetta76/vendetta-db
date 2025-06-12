@@ -20,7 +20,7 @@ export default function CreateFolder({ token, onCreated }: Props) {
     setLoading(true);
     setError("");
 
-    const res = await fetch("/api/create-folder", {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/create-folder`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

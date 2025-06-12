@@ -108,7 +108,7 @@ export default function Upload({ token, folders, onUploaded, forcedFolder }: Pro
             resolve();
           };
 
-          xhr.open("POST", "/api/upload");
+          xhr.open("POST", `${import.meta.env.VITE_API_BASE_URL}/api/upload`);
           xhr.setRequestHeader("Authorization", `Bearer ${token}`);
           setFiles((prev) => {
             const updated = [...prev];
