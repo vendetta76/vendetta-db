@@ -1,10 +1,11 @@
-import { useState, ChangeEvent } from "react";
+import { useState } from "react";
+import type { ChangeEvent } from "react"; // ✅ fix TS1484
 
 type Props = {
   token: string;
   folders: string[];
   onUploaded: () => void;
-  forcedFolder?: string; // ✅ tambahan
+  forcedFolder?: string;
 };
 
 type FileState = {
@@ -20,7 +21,7 @@ export default function Upload({ token, folders, onUploaded, forcedFolder }: Pro
   const [files, setFiles] = useState<FileState[]>([]);
   const [uploading, setUploading] = useState(false);
 
-  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+  const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
   const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const selected = Array.from(e.target.files || []).map((file) => {
@@ -49,17 +50,15 @@ export default function Upload({ token, folders, onUploaded, forcedFolder }: Pro
 
   const handleUpload = async () => {
     const pendingFiles = files.filter((f) => f.status === "pending");
-
     setUploading(true);
 
     await Promise.all(
-      pendingFiles.map((entry, idx) => {
+      pendingFiles.map((entry) => {
         return new Promise<void>((resolve) => {
           const xhr = new XMLHttpRequest();
           const formData = new FormData();
           formData.append("file", entry.file);
 
-          // ✅ Gunakan forcedFolder kalau ada
           const folderToUse = forcedFolder || selectedFolder;
           if (folderToUse) {
             formData.append("folder", folderToUse);
@@ -83,9 +82,7 @@ export default function Upload({ token, folders, onUploaded, forcedFolder }: Pro
             setFiles((prev) => {
               const updated = [...prev];
               updated[realIdx].status = success ? "done" : "error";
-              updated[realIdx].errorMsg = success
-                ? undefined
-                : `Error: ${xhr.status}`;
+              updated[realIdx].errorMsg = success ? undefined : `Error: ${xhr.status}`;
               return updated;
             });
             resolve();
@@ -145,12 +142,7 @@ export default function Upload({ token, folders, onUploaded, forcedFolder }: Pro
         </select>
       )}
 
-      <input
-        type="file"
-        multiple
-        onChange={handleFileSelect}
-        className="block"
-      />
+      <input type="file" multiple onChange={handleFileSelect} className="block" />
 
       {files.length > 0 && (
         <div className="space-y-2">
@@ -181,9 +173,7 @@ export default function Upload({ token, folders, onUploaded, forcedFolder }: Pro
                 />
               </div>
 
-              {errorMsg && (
-                <div className="text-red-600 text-xs">{errorMsg}</div>
-              )}
+              {errorMsg && <div className="text-red-600 text-xs">{errorMsg}</div>}
               {status === "done" && (
                 <div className="text-green-600 text-xs">Uploaded ✅</div>
               )}
