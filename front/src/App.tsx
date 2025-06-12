@@ -51,18 +51,6 @@ export default function App() {
     setFiles(visibleFiles);
   };
 
-  const handleLogin = async () => {
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password: "your-password" }), // Ganti dengan password env kamu
-    });
-
-    const data = await res.json();
-    setToken(data.token);
-    fetchList(data.token);
-  };
-
   useEffect(() => {
     if (token) {
       fetchList(token);
