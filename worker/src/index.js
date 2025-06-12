@@ -81,15 +81,20 @@ export default {
 
     // List
     if (url.pathname === "/api/list" && method === "GET") {
-      const list = await env.R2_BUCKET.list({ prefix: "uploads/" });
-      const files = list.objects.map(obj => ({
-        name: obj.key,
-        url: `${R2_PUBLIC_URL}/${obj.key}`
-      }));
-      return withCORS(new Response(JSON.stringify(files), {
-        headers: { "Content-Type": "application/json" }
-      }));
-    }
+  const list = await env.R2_BUCKET.list({ prefix: "uploads/" });
+
+  const files = list.objects.map(obj => ({
+    name: obj.key,
+    url: `${R2_PUBLIC_URL}/${obj.key}`,
+    size: obj.size,
+    uploaded: obj.uploaded?.toISOString?.() || new Date().toISOString()
+  }));
+
+  return withCORS(new Response(JSON.stringify(files), {
+    headers: { "Content-Type": "application/json" }
+  }));
+}
+
 
     // Delete
     if (url.pathname === "/api/delete" && method === "DELETE") {
